@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { typeDefs, resolvers } from './schemas/index.js';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 
@@ -15,6 +16,9 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
 });
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const startApolloServer = async () => {
   await server.start();
