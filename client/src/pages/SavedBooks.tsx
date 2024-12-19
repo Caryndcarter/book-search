@@ -7,8 +7,7 @@ import { REMOVE_BOOK } from '../utils/mutations';
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 //import type { User } from '../models/User';
-//import type { UserDocument } from '../models/User.js'; 
-import type { BookDocument } from '../models/Book.js';  
+import type { Book } from '../models/Book.js';  
 
 
 const SavedBooks = () => {
@@ -67,7 +66,7 @@ const SavedBooks = () => {
             : 'You have no saved books!'}
         </h2>
         <Row>
-          {userData.savedBooks.map((book: BookDocument) => {
+          {userData.savedBooks.map((book: Book) => {
             return (
               <Col md='4'>
                 <Card key={book.bookId} border='dark'>
