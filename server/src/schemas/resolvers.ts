@@ -20,7 +20,7 @@ const resolvers = {
 
   Mutation: {
     // create a user, sign a token, and send it back (to client/src/components/SignUpForm.js)
-    createUser: async (_parent: any, { input }: { input: { username: string; email: string; password: string } }) => {
+    addUser: async (_parent: any, { input }: { input: { username: string; email: string; password: string } }) => {
       const user = await User.create(input);
 
       if (!user) {
@@ -68,7 +68,7 @@ const resolvers = {
     },
 
     // remove a book from `savedBooks`
-    deleteBook: async (_parent: any, { bookId }: { bookId: string }, context: any) => {
+    removeBook: async (_parent: any, { bookId }: { bookId: string }, context: any) => {
       if (!context.user) {
         throw new GraphQLError('You must be logged in!');
       }

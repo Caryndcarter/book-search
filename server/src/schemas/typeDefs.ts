@@ -6,6 +6,11 @@ const typeDefs = `
     me: User
   }
 
+  # Query Type
+  type Query {
+    getSingleUser(id: ID!): User
+  }
+
   # Mutation Type
   type Mutation {
     login(email: String!, password: String!): Auth
