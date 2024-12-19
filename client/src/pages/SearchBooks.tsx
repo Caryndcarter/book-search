@@ -12,8 +12,8 @@ import {
 import { useMutation } from '@apollo/client';
 import Auth from '../utils/auth';
 import { SAVE_BOOK } from '../utils/mutations';
-//import { saveBook, searchGoogleBooks } from '../utils/API';
-//import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
+import { searchGoogleBooks } from '../utils/API';
+import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 import type { Book } from '../models/Book';
 import type { GoogleAPIBook } from '../models/GoogleAPIBook';
 
@@ -30,7 +30,10 @@ const SearchBooks = () => {
   // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
   useEffect(() => {
     return () => saveBookIds(savedBookIds);
-  });
+  },[savedBookIds]);
+
+    // Apollo useMutation hook for SAVE_BOOK
+    const [saveBookMutation] = useMutation(SAVE_BOOK);
 
   // create method to search for books and set state on form submit
   const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -64,9 +67,6 @@ const SearchBooks = () => {
     }
   };
 
-    // Use the Apollo `useMutation` hook for SAVE_BOOK
-    const [saveBookMutation] = useMutation(SAVE_BOOK);
-
   // create function to handle saving a book to our database
   const handleSaveBook = async (bookId: string) => {
     // find the book in `searchedBooks` state by the matching id
@@ -92,8 +92,11 @@ const SearchBooks = () => {
         },
       });
 
+      if (data) {
+        // Update the savedBookIds state
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
+      }
     } catch (err) {
       console.error(err);
     }
