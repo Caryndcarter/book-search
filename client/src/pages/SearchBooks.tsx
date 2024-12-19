@@ -83,12 +83,14 @@ const SearchBooks = () => {
       // Call the saveBook mutation
       const { data } = await saveBookMutation({
         variables: {
+          book: {
           bookId: bookToSave.bookId,
           authors: bookToSave.authors,
           title: bookToSave.title,
           description: bookToSave.description,
           image: bookToSave.image,
           link: bookToSave.link,
+          }
         },
       });
 
