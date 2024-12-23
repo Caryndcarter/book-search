@@ -28,7 +28,7 @@ const startApolloServer = async () => {
   
   app.use('/graphql', expressMiddleware(server));
 
-
+  //app.use(routes);
 
   app.use(express.static(path.join(__dirname, '../../client/dist')));
 
