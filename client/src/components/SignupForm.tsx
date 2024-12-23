@@ -34,6 +34,8 @@ const SignupForm = ({}: { handleModalClose: () => void }) => {
       event.stopPropagation();
     }
 
+    console.log(userFormData);
+
     try {
       const { data } = await addUser({
         variables: {
@@ -43,6 +45,8 @@ const SignupForm = ({}: { handleModalClose: () => void }) => {
         },
       });
 
+    console.log(data); 
+
       if (!data) {
         throw new Error('something went wrong!');
       }
@@ -51,7 +55,7 @@ const SignupForm = ({}: { handleModalClose: () => void }) => {
       Auth.login(token);
 
     } catch (err) {
-      console.error(err);
+      console.error(JSON.stringify(err, null, 2)); 
       setShowAlert(true);
     }
 

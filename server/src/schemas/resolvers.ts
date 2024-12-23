@@ -19,13 +19,16 @@ const resolvers = {
   },
 
   Mutation: {
-    // create a user, sign a token, and send it back (to client/src/components/SignUpForm.js)
-    addUser: async (_parent: any, { input }: { input: { username: string; email: string; password: string } }) => {
-      const user = await User.create(input);
-
+    // create a user, sign a token, and send it back (to client/src/components/SignUpForm.js
+    addUser: async (_parent:any { username, email, password } : { username: string; email: string; password: string }) => {
+      console.log('Inputs:', { username, email, password });
+      
+      const user = await User.create({ username, email, password });
+    
       if (!user) {
         throw new GraphQLError('Something is Wrong! Creating user failed');
       }
+    
       const token = signToken(user.username, user.password, user._id);
       return { token, user };
     },
