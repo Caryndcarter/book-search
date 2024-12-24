@@ -40,9 +40,12 @@ const LoginForm = ({}: { handleModalClose: () => void }) => {
         },
       });
 
-      if (!data.ok) {
-        throw new Error('something went wrong!');
-      }
+      console.log('Login response data:', data);
+
+       // Check if the token exists
+    if (!data || !data.login || !data.login.token) {
+      throw new Error('Login failed: Token is missing!');
+    }
 
       const { token } = data.login;
       Auth.login(token);
