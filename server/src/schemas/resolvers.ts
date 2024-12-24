@@ -53,19 +53,32 @@ const resolvers = {
     },
 
     // save a book to a user's `savedBooks` field by adding it to the set (to prevent duplicates)
-    saveBook: async (_parent: any, { input }: { input: { bookId: string; title: string; authors: string[] } }, context: any) => {
+    saveBook: async (_parent: any, { book }: { book: { bookId: string; title: string; authors: string[] } }, context: any) => {
       if (!context.user) {
+        console.log('No user in context:', context.user);
         throw new GraphQLError('You must be logged in');
       }
 
       try {
+
+        console.log('Attempting to update user with book:', book);
+
         const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $addToSet: { savedBooks: input } },
+          { $addToSet: { savedBooks: book } },
           { new: true, runValidators: true }
         );
+
+        console.log('Updated user:', updatedUser);
+
+        if (!updatedUser) {
+          console.log('User not found or update failed.');
+          throw new GraphQLError('Error saving book: User not found or update failed.');
+        }
+
         return updatedUser;
       } catch (err) {
+        console.log('Error saving book:', err);
         throw new GraphQLError('Error saving book.');
       }
     },

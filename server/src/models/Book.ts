@@ -17,8 +17,7 @@ const bookSchema = new Schema<BookDocument>({
     },
   ],
   description: {
-    type: String,
-    required: true,
+    type: String
   },
   // saved book id from GoogleBooks
   bookId: {

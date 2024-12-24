@@ -14,20 +14,27 @@ export const authenticateToken = ({ req }: any) => {
   // Allows token to be sent via req.body, req.query, or headers
   let token = req.body.token || req.query.token || req.headers.authorization;
 
+  console.log('Auth Header:', req.headers.authorization);
+
   // If the token is sent in the authorization header, extract the token from the header
   if (req.headers.authorization) {
     token = token.split(' ').pop().trim();
   }
 
-  // If no token is provided, return the request object as is
-  if (!token) {
-    return req;
-  }
+     // If no token is provided, return context with user as null
+     if (!token) {
+      console.log('No token provided');
+      return req;
+    }
 
   // Try to verify the token
   try {
-    const { data }: any = jwt.verify(token, process.env.JWT_SECRET_KEY || '', { maxAge: '2hr' });
+    const { data }: any = jwt.verify(token, process.env.JWT_SECRET_KEY || '');
     // If the token is valid, attach the user data to the request object
+
+    // Log the decoded data
+    console.log('Decoded User Data:', data);
+
     req.user = data;
   } catch (err) {
     // If the token is invalid, log an error message

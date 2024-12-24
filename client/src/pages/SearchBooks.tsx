@@ -72,6 +72,8 @@ const SearchBooks = () => {
     // find the book in `searchedBooks` state by the matching id
     const bookToSave: Book = searchedBooks.find((book) => book.bookId === bookId)!;
 
+    console.log('Book to save:', bookToSave);
+
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -89,7 +91,7 @@ const SearchBooks = () => {
           title: bookToSave.title,
           description: bookToSave.description,
           image: bookToSave.image,
-          link: bookToSave.link,
+          //link: bookToSave.link,
           }
         },
       });
