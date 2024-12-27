@@ -3,9 +3,8 @@ import { useQuery, useMutation } from '@apollo/client';
 import { Container, Card, Button, Row, Col } from 'react-bootstrap';
 import { GET_ME } from '../utils/queries';
 import { REMOVE_BOOK } from '../utils/mutations';
-//import { getMe, deleteBook } from '../utils/API';
 import Auth from '../utils/auth';
-import { removeBookId } from '../utils/localStorage';
+//import { removeBookId } from '../utils/localStorage';
 //import type { User } from '../models/User';
 import type { Book } from '../models/Book.js';  
 
@@ -34,8 +33,7 @@ const SavedBooks = () => {
       });
 
       if (data?.removeBook) {
-        // Upon success, remove book's ID from localStorage
-        removeBookId(bookId);
+        console.log('Book removed successfully from the database');
       }
     } catch (err) {
       console.error(err);
