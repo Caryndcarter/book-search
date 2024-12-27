@@ -16,7 +16,21 @@ const resolvers = {
       }
       return foundUser;
     },
+
+    me: async (_parent:any, _args:any, context:any) => {
+      if (!context.user) {
+        throw new GraphQLError('Not authenticated');
+      }
+      try {
+        const user = await User.findById(context.user._id).populate('savedBooks');
+        return user;
+      } catch (err) {
+        console.error('Error fetching user:', err);
+        throw new GraphQLError('Error fetching user');
+      }
+    },
   },
+  
 
   Mutation: {
     // create a user, sign a token, and send it back (to client/src/components/SignUpForm.js
