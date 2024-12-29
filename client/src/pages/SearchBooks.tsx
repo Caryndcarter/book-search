@@ -44,6 +44,8 @@ const SearchBooks = () => {
     // Apollo useMutation hook for SAVE_BOOK
   const [saveBookMutation] = useMutation(SAVE_BOOK);
 
+  
+
   // create method to search for books and set state on form submit
   const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -53,22 +55,34 @@ const SearchBooks = () => {
     }
 
     try {
-      const searchGoogleBooks = (query: string) => {
-        //const apiKey = import.meta.env.VITE_GOOGLE_BOOKS_API_KEY;
-        //console.log('API Key:', apiKey);
-        //console.log('Environment Variables:', import.meta.env);
-        return fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}&printType=books&maxResults=10`);
+
+      const searchGoogleBooks = async (query: string) => {
+        try {
+          const response = await fetch(`/api/search-books?q=${query}`);
+          const data = await response.json();
+  
+          if (response.ok) {
+            console.log('Books Data:', data);
+            return data;  
+            
+          } else {
+            console.log('Error:', data.error);
+            return null;  
+          }
+        } catch (error) {
+          console.error('Request failed', error);
+          return null; 
+        }
       };
-
-      const response = await searchGoogleBooks(searchInput);
-
-      if (!response.ok) {
-        throw new Error('something went wrong!');
+  
+      const data = await searchGoogleBooks(searchInput);  // Get the data from backend
+  
+      if (!data || !data.items) {
+        console.error('No books data found');
+        return;
       }
 
-      const { items } = await response.json();
-
-      const bookData = items.map((book: GoogleAPIBook) => ({
+      const bookData = data.items.map((book: GoogleAPIBook) => ({
         bookId: book.id,
         authors: book.volumeInfo.authors || ['No author to display'],
         title: book.volumeInfo.title,
