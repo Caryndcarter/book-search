@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
 import type { FormEvent } from 'react';
 import { Container, Card, Button, Row, Form, Col } from 'react-bootstrap';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import Auth from '../utils/auth';
 import { SAVE_BOOK } from '../utils/mutations';
-import { searchGoogleBooks } from '../utils/API';
-import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
+import { GET_ME } from '../utils/queries';
+//import { searchGoogleBooks } from '../utils/API';
+//import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 import type { Book } from '../models/Book';
 import type { GoogleAPIBook } from '../models/GoogleAPIBook';
+//import { getSavedBookIds } from '../utils/localStorage';
 
 const SearchBooks = () => {
   // create state for holding returned google api data
@@ -16,16 +18,31 @@ const SearchBooks = () => {
   const [searchInput, setSearchInput] = useState('');
 
   // create state to hold saved bookId values
-  const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
+  // const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
+
+  // create state to hold saved bookId values
+  const [savedBookIds, setSavedBookIds] = useState<string[]>([]);  
+
+  // Apollo useQuery hook to fetch saved book IDs
+  const { data } = useQuery(GET_ME, {
+    skip: !Auth.loggedIn(), // Only fetch if the user is logged in
+  });
+
+  useEffect(() => {
+    if (data?.me?.savedBooks) {
+      const ids = data.me.savedBooks.map((book: Book) => book.bookId);
+      setSavedBookIds(ids);
+    }
+  }, [data]);
 
   // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
   // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
-  useEffect(() => {
-    return () => saveBookIds(savedBookIds);
-  },[savedBookIds]);
+  // useEffect(() => {
+  // return () => saveBookIds(savedBookIds);
+  // },[savedBookIds]);
 
     // Apollo useMutation hook for SAVE_BOOK
-    const [saveBookMutation] = useMutation(SAVE_BOOK);
+  const [saveBookMutation] = useMutation(SAVE_BOOK);
 
   // create method to search for books and set state on form submit
   const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -36,6 +53,13 @@ const SearchBooks = () => {
     }
 
     try {
+      const searchGoogleBooks = (query: string) => {
+        //const apiKey = import.meta.env.VITE_GOOGLE_BOOKS_API_KEY;
+        //console.log('API Key:', apiKey);
+        //console.log('Environment Variables:', import.meta.env);
+        return fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}&printType=books&maxResults=10`);
+      };
+
       const response = await searchGoogleBooks(searchInput);
 
       if (!response.ok) {
@@ -93,6 +117,7 @@ const SearchBooks = () => {
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
       }
+      
     } catch (err) {
       console.error(err);
     }
@@ -133,6 +158,7 @@ const SearchBooks = () => {
         </h2>
         <Row>
           {searchedBooks.map((book) => {
+            const isSaved = savedBookIds?.includes(book.bookId);
             return (
               <Col md="4" key={book.bookId}>
                 <Card border='dark'>
@@ -144,13 +170,20 @@ const SearchBooks = () => {
                     <p className='small'>Authors: {book.authors}</p>
                     <Card.Text>{book.description}</Card.Text>
                     {Auth.loggedIn() && (
+                      // <Button
+                      //   disabled={savedBookIds?.some((savedBookId: string) => savedBookId === book.bookId)}
+                      //   className='btn-block btn-info'
+                      //   onClick={() => handleSaveBook(book.bookId)}>
+                      //   {savedBookIds?.some((savedBookId: string) => savedBookId === book.bookId)
+                      //     ? 'This book has already been saved!'
+                      //     : 'Save this Book!'}
+                      // </Button>
+
                       <Button
-                        disabled={savedBookIds?.some((savedBookId: string) => savedBookId === book.bookId)}
-                        className='btn-block btn-info'
-                        onClick={() => handleSaveBook(book.bookId)}>
-                        {savedBookIds?.some((savedBookId: string) => savedBookId === book.bookId)
-                          ? 'This book has already been saved!'
-                          : 'Save this Book!'}
+                      disabled={isSaved}
+                      className='btn-block btn-info'
+                      onClick={() => handleSaveBook(book.bookId)}>
+                      {isSaved ? 'This book has already been saved!' : 'Save this Book!'}
                       </Button>
                     )}
                   </Card.Body>
