@@ -5,20 +5,14 @@ import { useMutation, useQuery } from '@apollo/client';
 import Auth from '../utils/auth';
 import { SAVE_BOOK } from '../utils/mutations';
 import { GET_ME } from '../utils/queries';
-//import { searchGoogleBooks } from '../utils/API';
-//import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 import type { Book } from '../models/Book';
 import type { GoogleAPIBook } from '../models/GoogleAPIBook';
-//import { getSavedBookIds } from '../utils/localStorage';
 
 const SearchBooks = () => {
   // create state for holding returned google api data
   const [searchedBooks, setSearchedBooks] = useState<Book[]>([]);
   // create state for holding our search field data
   const [searchInput, setSearchInput] = useState('');
-
-  // create state to hold saved bookId values
-  // const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
 
   // create state to hold saved bookId values
   const [savedBookIds, setSavedBookIds] = useState<string[]>([]);  
@@ -35,16 +29,8 @@ const SearchBooks = () => {
     }
   }, [data]);
 
-  // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
-  // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
-  // useEffect(() => {
-  // return () => saveBookIds(savedBookIds);
-  // },[savedBookIds]);
-
     // Apollo useMutation hook for SAVE_BOOK
   const [saveBookMutation] = useMutation(SAVE_BOOK);
-
-  
 
   // create method to search for books and set state on form submit
   const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -64,7 +50,7 @@ const SearchBooks = () => {
           if (response.ok) {
             console.log('Books Data:', data);
             return data;  
-            
+
           } else {
             console.log('Error:', data.error);
             return null;  
@@ -184,15 +170,6 @@ const SearchBooks = () => {
                     <p className='small'>Authors: {book.authors}</p>
                     <Card.Text>{book.description}</Card.Text>
                     {Auth.loggedIn() && (
-                      // <Button
-                      //   disabled={savedBookIds?.some((savedBookId: string) => savedBookId === book.bookId)}
-                      //   className='btn-block btn-info'
-                      //   onClick={() => handleSaveBook(book.bookId)}>
-                      //   {savedBookIds?.some((savedBookId: string) => savedBookId === book.bookId)
-                      //     ? 'This book has already been saved!'
-                      //     : 'Save this Book!'}
-                      // </Button>
-
                       <Button
                       disabled={isSaved}
                       className='btn-block btn-info'

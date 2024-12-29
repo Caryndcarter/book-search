@@ -1,11 +1,8 @@
-//import { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { Container, Card, Button, Row, Col } from 'react-bootstrap';
 import { GET_ME } from '../utils/queries';
 import { REMOVE_BOOK } from '../utils/mutations';
 import Auth from '../utils/auth';
-//import { removeBookId } from '../utils/localStorage';
-//import type { User } from '../models/User';
 import type { Book } from '../models/Book.js';  
 
 

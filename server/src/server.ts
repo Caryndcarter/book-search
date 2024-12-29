@@ -2,7 +2,6 @@ import express from 'express';
 import path from 'node:path';
 import db from './config/connection.js';
 import fetch from 'node-fetch';
-//import routes from './routes/index.js';
 import dotenv from 'dotenv';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
@@ -51,6 +50,8 @@ app.get('/api/search-books', async (req, res) => {
   }
 });
 
+
+//create Apollo Server
 const startApolloServer = async () => {
   await server.start();
   
@@ -63,7 +64,6 @@ const startApolloServer = async () => {
     }
   ));
 
-  //app.use(routes);
 
   app.use(express.static(path.join(__dirname, '../../client/dist')));
 
