@@ -14,7 +14,7 @@ export const authenticateToken = ({ req }: any) => {
   // Allows token to be sent via req.body, req.query, or headers
   let token = req.body.token || req.query.token || req.headers.authorization;
 
-  console.log('Auth Header:', req.headers.authorization);
+  // console.log('Auth Header:', req.headers.authorization);
 
   // If the token is sent in the authorization header, extract the token from the header
   if (req.headers.authorization) {
@@ -33,7 +33,7 @@ export const authenticateToken = ({ req }: any) => {
     // If the token is valid, attach the user data to the request object
 
     // Log the decoded data
-    console.log('Decoded User Data:', data);
+    // console.log('Decoded User Data:', data);
 
     req.user = data;
   } catch (err) {

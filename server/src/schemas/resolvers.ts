@@ -75,7 +75,7 @@ const resolvers = {
 
       try {
 
-        console.log('Attempting to update user with book:', book);
+        // console.log('Attempting to update user with book:', book);
 
         const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
@@ -83,7 +83,7 @@ const resolvers = {
           { new: true, runValidators: true }
         );
 
-        console.log('Updated user:', updatedUser);
+        // console.log('Updated user:', updatedUser);
 
         if (!updatedUser) {
           console.log('User not found or update failed.');

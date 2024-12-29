@@ -48,7 +48,7 @@ const SearchBooks = () => {
           const data = await response.json();
   
           if (response.ok) {
-            console.log('Books Data:', data);
+            // console.log('Books Data:', data);
             return data;  
 
           } else {
@@ -88,7 +88,7 @@ const SearchBooks = () => {
     // find the book in `searchedBooks` state by the matching id
     const bookToSave: Book = searchedBooks.find((book) => book.bookId === bookId)!;
 
-    console.log('Book to save:', bookToSave);
+    // console.log('Book to save:', bookToSave);
 
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;

@@ -38,7 +38,7 @@ const LoginForm = ({}: { handleModalClose: () => void }) => {
         },
       });
 
-      console.log('Login response data:', data);
+      //console.log('Login response data:', data);
 
        // Check if the token exists
     if (!data || !data.login || !data.login.token) {

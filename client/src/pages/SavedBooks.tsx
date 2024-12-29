@@ -13,7 +13,7 @@ const SavedBooks = () => {
   
     // Extract user data from query result
     const userData = data?.me || { savedBooks: [] };
-    console.log(userData); 
+    //console.log(userData); 
 
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId: string) => {

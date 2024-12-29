@@ -14,8 +14,8 @@ const SignupForm = ({}: { handleModalClose: () => void }) => {
   // set state for alert
   const [showAlert, setShowAlert] = useState(false);
 
-    // Set up mutation hook
-    const [addUser] = useMutation(ADD_USER);
+  // Set up mutation hook
+  const [addUser] = useMutation(ADD_USER);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -32,7 +32,7 @@ const SignupForm = ({}: { handleModalClose: () => void }) => {
       event.stopPropagation();
     }
 
-    console.log(userFormData);
+   // console.log(userFormData);
 
     try {
       const { data } = await addUser({
@@ -43,10 +43,10 @@ const SignupForm = ({}: { handleModalClose: () => void }) => {
         },
       });
 
-    console.log(data); 
+    //console.log(data); 
 
       if (!data) {
-        throw new Error('something went wrong!');
+        throw new Error('Something went wrong!');
       }
 
       const { token } = data.addUser;
